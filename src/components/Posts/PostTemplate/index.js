@@ -7,21 +7,14 @@ import mediumZoom from "medium-zoom"
 import storage from "local-storage-fallback"
 import { isMobile } from "react-device-detect"
 import { setThemeVars } from "../../../util/theme-helper"
-import { comments } from "../../../../customize"
 import configStyles from "../../../../customize-styles"
 import Layout from "../../Layout"
 import Hr from "../../Hr"
 import Profile from "../../Profile"
 import SEO from "../../SEO"
-import {
-  FacebookComments,
-  DisqusComments,
-  UtterancesComments,
-} from "../../Comments"
 import ToggleMode from "../../Layout/ToggleMode"
 import { theme } from "../../Shared/styles-global"
 import LinkEdgePosts from "../../LinkEdgePosts"
-import ShareButtons from "../../ShareButtons"
 import ChevronRight from "../../../../_assets/icons/chevron-right.svg"
 import {
   Primary,
@@ -49,13 +42,6 @@ class PostTemplate extends React.Component {
     if (isMobile) {
       this.moveAnchorHeadings()
     }
-    this.zoomImages()
-    if (comments.facebook.enabled) {
-      this.registerFacebookComments()
-    }
-    if (comments.utterances.enabled && comments.utterances.repoUrl) {
-      this.registerUtterancesComments(comments.utterances.repoUrl)
-    }
   }
 
   componentDidUpdate() {
@@ -64,63 +50,12 @@ class PostTemplate extends React.Component {
     }
   }
 
-  registerUtterancesComments = repo => {
-    // Register utterances if it exists
-    if (this.utterancesRef.current) {
-      const script = document.createElement("script")
-      script.src = "https://utteranc.es/client.js"
-      script.async = true
-      script.crossOrigin = "anonymous"
-      script.setAttribute("repo", repo)
-      script.setAttribute("issue-term", "pathname")
-      script.setAttribute("label", "blog-comment")
-      script.setAttribute(
-        "theme",
-        `${theme.curTheme === "dark" ? "github-dark" : "github-light"}`
-      )
-      this.utterancesRef.current.appendChild(script)
-    }
-  }
 
-  registerFacebookComments = () => {
-    // Unregister if already exists
-    this.unregisterFacebookComments()
-    // Register facebook comments sdk
-    const script = document.createElement("script")
-    script.src = "https://connect.facebook.net/en_US/sdk.js"
-    script.async = true
-    script.defer = true
-    script.crossOrigin = "anonymous"
-    // Set as state to unmount script
-    this.setState({ script: script })
-    document.body.appendChild(script)
-    window.fbAsyncInit = function() {
-      window.FB.init({
-        appId: comments.facebook.appId,
-        autoLogAppEvents: true,
-        xfbml: true,
-        version: "v6.0",
-      })
-    }
-  }
 
-  unregisterFacebookComments = () => {
-    // Unmount script and comments div
-    if (this.state.script) {
-      document.body.removeChild(this.state.script)
-      const fbRoot = document.getElementById("fb-root")
 
-      if (fbRoot) {
-        document.body.removeChild(fbRoot)
-      }
 
-      this.setState({ script: undefined })
-    }
-  }
 
-  componentWillUnmount() {
-    this.unregisterFacebookComments()
-  }
+
 
   zoomImages = () => {
     const targetImg = "img"
@@ -278,27 +213,12 @@ class PostTemplate extends React.Component {
 
         {!isAboutPage && (
           <>
-            <ShareButtons location={this.state.locations} />
             <LinkEdgePosts pageContext={this.props.pageContext} />
             <Hr widthInPercent="97" verticalMargin="0.8rem" />
             <Profile />
             <Hr widthInPercent="97" verticalMargin="0.8rem" />
 
-            {comments.facebook.enabled && (
-              <FacebookComments
-                location={this.state.location}
-                reload={this.registerFacebookComments}
-              />
-            )}
-            {comments.disqus.enabled && comments.disqus.shortName && (
-              <DisqusComments
-                shortName={comments.disqus.shortName}
-                location={this.state.location}
-              />
-            )}
-            {comments.utterances.enabled && comments.utterances.repoUrl && (
-              <UtterancesComments innerRef={this.utterancesRef} />
-            )}
+   
           </>
         )}
       </Layout>

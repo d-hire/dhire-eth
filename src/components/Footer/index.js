@@ -1,9 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import { Link } from "gatsby"
 import config from "../../../customize"
-import RSS from "../../../_assets/icons/rss.svg"
-import { setThemeVars } from "../../util/theme-helper"
 
 const Footer = () => {
   return (
@@ -25,12 +22,12 @@ const Footer = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          gatsby-blog-mdx
+          <span role="img" aria-label="heart_emoji">💖</span>
+
         </StyledA>
       </div>
-      <Link to="/rss.xml">
-        <StyledRSS />
-      </Link>
+      <StyledA/>
+
     </StyledFooter>
   )
 }
@@ -52,8 +49,4 @@ const StyledFooter = styled.footer`
 `
 const StyledA = styled.a``
 
-const StyledRSS = styled(RSS)`
-  width: 20px;
-  height: 20px;
-  fill: ${() => setThemeVars("#aaa", "#888")};
-`
+
