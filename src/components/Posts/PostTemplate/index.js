@@ -50,13 +50,6 @@ class PostTemplate extends React.Component {
     }
   }
 
-
-
-
-
-
-
-
   zoomImages = () => {
     const targetImg = "img"
     const targetGatsbyImg = "gatsby-resp-image-image"

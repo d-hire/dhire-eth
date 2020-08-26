@@ -6,11 +6,7 @@ import { socialMediaLinks } from "../../../customize"
 const MediaLinks = () => {
   return (
     <StyledMediaLinks>
-      <MediaLink
-        accountInfo={socialMediaLinks.email.emailAddress}
-        mediaName="Email"
-        preHref="mailto:"
-      />
+   
       <MediaLink
         accountInfo={socialMediaLinks.github.accountName}
         mediaName="GitHub"
